@@ -11,7 +11,7 @@ client(Server_Node, Name) ->
 
 client(Server_Node) ->
     receive
-        logoff ->
+        logout ->
             exit(normal);
         #message_to{to_name=ToName, message=Message} ->
             {messenger, Server_Node} ! 

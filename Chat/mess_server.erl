@@ -16,7 +16,7 @@ server(User_List) ->
             New_User_List = server_login(From, Name, User_List),
             server(New_User_List);
         {'EXIT', From, _} ->
-            New_User_List = server_logoff(From, User_List),
+            New_User_List = server_logout(From, User_List),
             server(New_User_List);
         #message{client_pid=From, to_name=To, message=Message} ->
             server_transfer(From, To, Message, User_List),
@@ -41,7 +41,7 @@ server_login(From, Name, User_List) ->
     end.
 
 %%% Borra un usuario de la lista
-server_logoff(From, User_List) ->
+server_logout(From, User_List) ->
     lists:keydelete(From, 1, User_List).
 
 %%% Transfiere el mensaje entre los usuarios
