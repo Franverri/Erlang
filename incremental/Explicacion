@@ -48,4 +48,12 @@ C2:
  		- process_info(Pid).  -> Murio
  		- process_info(whereis(c2)).  -> Murio(tira excepción porque el whereis no encuentra nada)
 
+C3:
+	1) Agregar hot code loading or swapping
+		- Pid = sup:start(c3, []).
+		- whereis(c3) ! terminate -> Muestra "RIP"
+		- Cambio lo que esta comentado por el otro y vuelvo a compilar c(c3).
+		- whereis(c3) ! terminate -> Muestra "RIP" -> Sigue mostrando lo mismo
+		- whereis(c3) ! code_swap
+		- whereis(c3) ! terminate -> Muestra "RIP V 2.0"
 
