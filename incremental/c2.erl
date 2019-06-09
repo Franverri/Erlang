@@ -22,7 +22,9 @@ chat_room(UsrList) ->
                 chat_room(UsrList)
         end;
     terminate ->
-        exit("RIP")
+        exit("RIP");
+    shutdown ->
+        exit(shutdown)
     end.
 
 start() ->
@@ -34,13 +36,4 @@ start_link() ->
     Pid.
 
 init() ->
-    loop().
-
-loop() ->
-    receive
-        shutdown ->
-            exit(shutdown);
-        Unknown ->
-            io:format("Unknown message: ~p~n",[Unknown]),
-            loop()
-    end.
+    chat_room([franco]).

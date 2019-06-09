@@ -39,9 +39,10 @@ C2:
  		- Pid = sup:start(c2, []).
  		- process_info(Pid).  -> muestra la info del procesos que esta vivo
  		- whereis(c2).
- 		- whereis(c2) ! hola.
- 		- exit(whereis(c2), moriii). -> Muestra el Pid donde estaba
- 		- exit(whereis(c2), moriii). -> Muestra un Pid distinto por lo que el suervisor se encargo de restartearlo ya que entra a la segunda clausula
+ 		- whereis(c2) ! {self() , franco}.
+ 		- flush(). -> Sigue funcionando igual que antes
+ 		- whereis(c2) ! terminate. o exit(whereis(c2), moriii). -> Muestra el Pid donde estaba
+ 		- whereis(c2) ! terminate. o exit(whereis(c2), moriii). -> Muestra un Pid distinto por lo que el suervisor se encargo de restartearlo ya que entra a la segunda clausula
  		- process_info(Pid).  -> Sigue vivo
  		- exit(Pid, shutdown). o whereis(c2) ! shutdown. -> Entra a la primer clausula y entonces muere el supervisor y por lo tanto también el hijo
  		- process_info(Pid).  -> Murio
