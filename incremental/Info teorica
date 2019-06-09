@@ -1,0 +1,19 @@
+LINKS:
+
+	- A link is a specific kind of relationship that can be created between two processes. When that relationship is set up and one of the processes dies from an unexpected throw, error or exit, the other linked process also dies.
+	
+	-This is a useful concept from the perspective of failing as soon as possible to stop errors: if the process that has an error crashes but those that depend on it don't, then all these depending processes now have to deal with a dependency disappearing. Letting them die and then restarting the whole group is usually an acceptable alternative. Links let us do exactly this.
+
+	-Error propagation across processes is done through a process similar to message passing, but with a special type of message called signals. Exit signals are 'secret' messages that automatically act on processes, killing them in the action.
+
+MONITORS:
+
+	- Monitors are what you want when a process wants to know what's going on with a second process, but neither of them really are vital to each other.
+
+	- They are unidirectional.
+
+EXPLICACIÓN PARA C2:
+
+	- In order to restart a process, we need a way to first know that it died. This can be done by adding a layer on top of links with a concept called system processes. System processes are basically normal processes, except they can convert exit signals to regular messages. This is done by calling process_flag(trap_exit, true) in a running process.
+	-The problem with our approach is that there is no way to find the Pid of the critic, and thus we can't call him to have his opinion. One of the solutions Erlang has to solve this is to give names to processes. The act of giving a name to a process allows you to replace the unpredictable pid by an atom. This atom can then be used exactly as a Pid when sending messages.
+	

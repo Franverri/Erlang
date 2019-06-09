@@ -1,31 +1,46 @@
 -module(c2).
+-compile(export_all).
 
--export([start/0, ping/2, pong/0]).
-
-ping(0, Pong_PID) ->
-    Pong_PID ! finished,
-    io:format("ping finished~n", []);
-
-ping(N, Pong_PID) ->
-    Pong_PID ! {ping, self()},
+chat_room(UsrList) ->
     receive
-        pong ->
-            io:format("Ping received pong~n", [])
-    end,
-    ping(N - 1, Pong_PID).
-
-pong() ->
-    receive
-        finished ->
-            io:format("Pong finished~n", []);
-        {ping, Ping_PID} ->
-            io:format("Pong received ping~n", []),
-            Ping_PID ! pong,
-            pong()
+    {From, User} ->
+        case lists:member(User, UsrList) of
+            true ->
+                From ! {self(), {encontrado, User}},
+                chat_room(UsrList);
+            false ->
+                From ! {self(), no_encontrado},
+                chat_room(UsrList)
+        end;
+    {From, delete, User} ->
+        case lists:member(User, UsrList) of
+            true ->
+                From ! {self(), {borrado, User}},
+                chat_room(lists:delete(User, UsrList));
+            false ->
+                From ! {self(), no_encontrado},
+                chat_room(UsrList)
+        end;
+    terminate ->
+        exit("RIP")
     end.
 
 start() ->
-    Pong_PID = spawn(c2, pong, []),
-    spawn(c2, ping, [3, Pong_PID]).
+    register(?MODULE, Pid=spawn(?MODULE, init, [])),
+    Pid.
 
-% register(pong, spawn(c2, pong, [])),
+start_link() ->
+    register(?MODULE, Pid=spawn_link(?MODULE, init, [])),
+    Pid.
+
+init() ->
+    loop().
+
+loop() ->
+    receive
+        shutdown ->
+            exit(shutdown);
+        Unknown ->
+            io:format("Unknown message: ~p~n",[Unknown]),
+            loop()
+    end.

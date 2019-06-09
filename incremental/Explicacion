@@ -1,0 +1,50 @@
+C1: 
+	1) Escritura de mensajes en consola en un único process (say_something).
+	2) Crear dos procesos distintos que cada uno escriba cosas distintas en la consola (start).
+	3) Mostrar que mismo la terminal (shell) es también un proceso (self(). -> Muestra si PID).
+		[Matar proceso exit(PID). -> exit(self()). -> restartea en otro PID (Ver porque tira el msg de excepción)]
+	4) Agregar send_something con el envío de mensajes al shell intentar correr y mostrar que no encuentra la función porque no está en el export.
+	5) Arreglarlo, enviar mensaje -> Correr tanto el say_something como el send_something para ver la diferencia que en uno ya por consola lo escribe, el otro solo muestra el done que es el retorno de la funcion
+	6) Hacer un flush(). y explicar que esto saca los mensajes de la cola del shell. [Volver a hacer flush y mostrar que ya no tiene mensajes pendientes]
+	7) Agregar el compile export_all y mencionar que se puede hacer para poder llamar a todas las funciones aunque no es recomendado ya que hay que pensarlo como interfaces y evitar exponer aquellas funciones que no deberían ser accesibles desde fuera
+	8) Agregar una funcion receive_somethig y correrla en un proceso nuevo
+		- ej = spawn(c1, receive_something, []). -> Va a fallar (Explicar que es porque el ej no empieza con mayúscula entonces intenta hacer una comparación y explicar como funciona esto de la comparación).
+		- Ej = spawn(c1, receive_something, []). -> Lo levanta el el PID mostrado en consola
+		- Ej ! hola. -> Ya escribe directo por consola al recibir eso 
+		- Volver a correr lo anterior y ver que no pasa lo mismo (no reacciona) -> Esto es porque se termino la función y por consiguiente el proceso muere.
+		- Agregar llamada recursiva en el caso default y correr varias veces (Ej ! asd.) y al final un (Ej ! hola.) y ahí termina el proceso porque no tiene la llamada recursiva
+
+		!!! [f(). -> Para liberar los valores de las variables y poder spawear de nuevo con el mismo nombre]
+	
+	9) Agregar dentro del pattern matching le responda a la consola (rcv_snd_some).
+		- Ej = spawn(c1, rcv_snd_some, []).
+		- Ej ! {self(), hola}. -> Envia el mensaje a shell
+		- [erlang:process_info(self(), messages) para ver la cola de ese proceso]
+
+
+C2:
+	1) Agregar estado al proceso (Poner una lista de usuarios)
+		- P1 = spawn(c2, chat_room, [[franco, martin]]).
+		- P1 ! {self(), franco}. -> flush() mustra que lo encontro
+		- P1 ! {self(), fran}. -> flush() mustra que no lo encontro
+	2) Borro un usuario y le mando mensaje de nuevo
+		- P1 = spawn(c2, chat_room, [[franco, martin]]).
+		- P1 ! {self(), delete, franco}.
+		- P1 ! {self(), franco}.
+		- flush().
+	3) Agregar un supervisor!
+ 		[Explicar un poco el codigo en sup.erl. OBS: el apply -> Module:Function(Arg1, Arg2) === apply(Module, Function, [Arg1,Arg2])]
+ 		- Se agrega el init al chat_room que es la funcion que llama el supervisor
+
+ 		- Pid = sup:start(c2, []).
+ 		- process_info(Pid).  -> muestra la info del procesos que esta vivo
+ 		- whereis(c2).
+ 		- whereis(c2) ! hola.
+ 		- exit(whereis(c2), moriii). -> Muestra el Pid donde estaba
+ 		- exit(whereis(c2), moriii). -> Muestra un Pid distinto por lo que el suervisor se encargo de restartearlo ya que entra a la segunda clausula
+ 		- process_info(Pid).  -> Sigue vivo
+ 		- exit(Pid, shutdown). o whereis(c2) ! shutdown. -> Entra a la primer clausula y entonces muere el supervisor y por lo tanto también el hijo
+ 		- process_info(Pid).  -> Murio
+ 		- process_info(whereis(c2)).  -> Murio(tira excepción porque el whereis no encuentra nada)
+
+
