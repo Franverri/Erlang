@@ -1,12 +1,16 @@
 -module(c3).
 -compile(export_all).
 
+%Pid = sup:start(c3, []).
+%Cambio, guardo, compilo -> Igual | code_swap -> cambia
+
 chat_room(UsrList) ->
     receive
     {From, User} ->
         case lists:member(User, UsrList) of
             true ->
                 From ! {self(), {encontrado, User}},
+                %From ! {self(), {found, User}},
                 chat_room(UsrList);
             false ->
                 From ! {self(), no_encontrado},
@@ -22,8 +26,7 @@ chat_room(UsrList) ->
                 chat_room(UsrList)
         end;
     terminate ->
-        %exit("RIP");
-        exit("RIP V 2.0");
+        exit("RIP");
     shutdown ->
         exit(shutdown);
     code_swap ->

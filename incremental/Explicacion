@@ -51,9 +51,9 @@ C2:
 C3:
 	1) Agregar hot code loading or swapping
 		- Pid = sup:start(c3, []).
-		- whereis(c3) ! terminate -> Muestra "RIP"
+		- whereis(c3) ! {self(), franco}. -> Muestra "encontrado"
 		- Cambio lo que esta comentado por el otro y vuelvo a compilar c(c3).
-		- whereis(c3) ! terminate -> Muestra "RIP" -> Sigue mostrando lo mismo
+		- whereis(c3) ! terminate -> Muestra "encontrado" -> Sigue mostrando lo mismo
 		- whereis(c3) ! code_swap
-		- whereis(c3) ! terminate -> Muestra "RIP V 2.0"
+		- whereis(c3) ! {self(), franco}. -> Muestra "found"
 

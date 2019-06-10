@@ -17,7 +17,7 @@ login(Name) ->
     case whereis(mess_client) of 
         undefined ->
             register(mess_client, 
-                     spawn(mess_client, client, [?server_node, Name]));
+                     spawn(mess_client, client, [?server_node, Name])); %?server_node: macro definida que da valor franco@Franco
         _ -> already_logged_on
     end.
 

@@ -35,4 +35,6 @@ NODOS:
 
 	- The list of (visible) nodes currently connected to is returned by nodes().
 
-	- SECURITY: Authentication determines which nodes are allowed to communicate with each other. In a network of different Erlang nodes, it is built into the system at the lowest possible level. Each node has its own magic cookie, which is an Erlang atom.
+	- SECURITY: Authentication determines which nodes are allowed to communicate with each other. In a network of different Erlang nodes, it is built into the system at the lowest possible level. Each node has its own magic cookie, which is an Erlang atom. When a node tries to connect to another node, the magic cookies are compared. If they do not match, the connected node rejects the connection.
+
+	- For a node Node1 with magic cookie Cookie to be able to connect to, or accept a connection from, another node Node2 with a different cookie DiffCookie, the function erlang:set_cookie(Node2, DiffCookie) must first be called at Node1.

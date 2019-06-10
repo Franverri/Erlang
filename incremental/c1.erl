@@ -9,11 +9,30 @@ say_something(What, Times) ->
     io:format("~p~n", [What]),
     say_something(What, Times - 1).
 
+%-----------------------------------------------
+
+start() ->
+    spawn(c1, say_something, [hello, 3]),
+    spawn(c1, say_something, [goodbye, 3]).
+
+%-----------------------------------------------
+
+% self().
+
+%-----------------------------------------------
+
 send_something(What, 0) ->
 	done;
 send_something(What, Times) ->
 	self() ! What,
 	send_something(What, Times -1).
+
+%export: all - warning
+
+%-----------------------------------------------
+
+%ej = spawn(c1, receive_something, []).
+%Var, atom, asignación única, f().
 
 receive_something() ->
 	receive 
@@ -21,7 +40,13 @@ receive_something() ->
 		chau -> io:format("Se están despidiendo~n");
 		_ ->	io:format("No entiendo~n"),
 				receive_something()
-	end.
+	end.	
+
+%Loop
+
+%-----------------------------------------------
+
+%Ej = spawn(c1, rcv_snd_some, []).
 
 rcv_snd_some() ->
 	receive
@@ -34,6 +59,4 @@ rcv_snd_some() ->
 		_ ->	io:format("No entiendo!~n")
 	end.
 
-start() ->
-    spawn(c1, say_something, [hello, 3]),
-    spawn(c1, say_something, [goodbye, 3]).
+%erlang:process_info(self(), messages)
