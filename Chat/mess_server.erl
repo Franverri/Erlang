@@ -5,7 +5,7 @@
 -include("mess_interface.hrl").
 
 server() ->
-    process_flag(trap_exit, true), %Para que pueda manejar los mensjaes de error (Explicado en C2 sino explicarlo)
+    process_flag(trap_exit, true), %Para que pueda manejar los mensajes de error (Explicado en C2, si no explicarlo)
     server([]).
 
 %%% Lista de usuarios de la forma [{ClientPid1, Name1},{ClientPid22, Name2},...]
@@ -62,6 +62,6 @@ server_transfer(From, Name, To, Message, User_List) ->
         false ->
             From ! #server_reply{message=receiver_not_found};
         {value, {ToPid, To}} ->
-            ToPid ! #message_from{from_name=Name, message=Message}, 
-            From !  #server_reply{message=sent} 
+            ToPid ! #message_from{from_name=Name, message=Message},
+            From !  #server_reply{message=sent}
     end.

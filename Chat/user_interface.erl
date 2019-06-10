@@ -14,10 +14,10 @@
 -include("mess_config.hrl").
 
 login(Name) ->
-    case whereis(mess_client) of 
+    case whereis(mess_client) of
         undefined ->
-            register(mess_client, 
-                     spawn(mess_client, client, [?server_node, Name])); %?server_node: macro definida que da valor franco@Franco
+            register(mess_client,
+                     spawn(mess_client, client, [?server_node, Name])); %?server_node: macro definida que da valor chat@Franco
         _ -> already_logged_on
     end.
 
