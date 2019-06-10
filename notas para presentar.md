@@ -85,24 +85,31 @@ Elixir es...
 ### Demo elixir
 Con chat mega rápido e interfaz incluida
 `mix phx.gen.channel NOMBRE`
-.....
+Mirar hacia la audiencia
+
+Pasos y cosas a mencionar:
+1. Tener todo instalado
+*  Crear proyecto `mix phx.new [franchat]`
+*  Mostrar estructura, hablar de scaffolding, `mix phx.server`
+*  `mix ecto.create`
+*  `mix phx.gen.schema Message messages name:string message:string`
+*  `mix ecto.migrate`
+*  Crear canal `mix phx.gen.channel ChatRoom`
+*  Salto! Y muestro lógica agregada: archivos abiertos
+*  Testeo: `mix test`
+*  Mostrar resultado  `mix phx.server`
+*  Mostrar live reloading y enorme velocidad de respuesta
 
 
 --------
 
 # Falta
 * Garbage collector
-* actores?
 * desarrollar lo de Elixir, para llenar tiempo
 * Overloading?
 * Error handling?
 * Records!
-* Hot swapping, hay un buen ejemplo en Wikipedia, incluirlo en el código (testearlo antes plz)
 * Hablar de los ppios de diseño de la OTP ?
 
-### Para las diapos:
-* Agregar diagrama de árbol (supervisor etc)
-
-%% Verificar si los módulos se escriben con mayúscula
 %% borrar DB Chat example app de mi compu (postgres)
 %% siempre el módulo antes ?? averiguar si se puede ahorrar
